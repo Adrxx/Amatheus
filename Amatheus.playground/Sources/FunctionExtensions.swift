@@ -19,11 +19,11 @@ extension Double {
   }
   
   public func cosine(amplitude: Double, frequency: Double) -> Double {
-    return sin(self*frequency)*amplitude
+    return cos(self*frequency)*amplitude
   }
   
   public func sine(amplitude: Double, frequency: Double) -> Double {
-    return self
+    return sin(self*frequency)*amplitude
   }
   
   public func tangent(amplitude: Double, frequency: Double) -> Double {
