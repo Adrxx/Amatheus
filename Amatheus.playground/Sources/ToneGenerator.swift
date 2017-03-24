@@ -2,6 +2,7 @@ import Foundation
 import AVFoundation
 
 class ToneGenerator {
+
   
   private let engine = AVAudioEngine()
   private let player = AVAudioPlayerNode()
@@ -28,32 +29,14 @@ class ToneGenerator {
     self.engine.prepare()
     try! self.engine.start()
     self.player.play()
+    self.player.volume = 0.0
   }
   
-  init() {
+  init(audioFile: AVAudioFile) {
     
-    let audiFileURL = Bundle.main.url(forResource:"c", withExtension: "mp3")!
-    let audioFile = try! AVAudioFile(forReading: audiFileURL)
     let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
     try! audioFile.read(into:buffer)
     
-    //buffer.floatChannelData?.pointee
-    
-    
-    //    buffer = AVAudioPCMBuffer(pcmFormat: player.outputFormat(forBus: 0), frameCapacity: 100)
-    //    buffer.frameLength = 100
-    //
-    //    // generate sine wave
-    //    let sr:Float = Float(mixer.outputFormat(forBus: 0).sampleRate)
-    //    let n_channels = mixer.outputFormat(forBus: 0).channelCount
-    //
-    //    var i = 0
-    //    while i < Int(buffer.frameLength) {
-    //      let val = sinf(441.0*Float(i)*2*Float(M_PI)/sr)
-    //
-    //      buffer.floatChannelData?.pointee[i] = val * 0.5
-    //      i+=Int(n_channels)
-    //    }
     reverb.loadFactoryPreset(.largeHall)
     reverb.wetDryMix = 35
 
