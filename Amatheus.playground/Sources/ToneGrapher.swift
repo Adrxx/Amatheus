@@ -15,22 +15,19 @@ public let B = 55.0
 
 public class ToneGrapher: SKNode {
   
-  public enum Mode {
+  public enum Mode : String {
     case floute
     case synth
     case sax
     
-    var audioFile: AVAudioFile {
-      var url: URL
-      switch self {
-      case .floute:
-        url = Bundle.main.url(forResource:"floute", withExtension: "m4a")!
-      case .synth:
-        url = Bundle.main.url(forResource:"synth", withExtension: "m4a")!
-      case .sax:
-        url = Bundle.main.url(forResource:"saxo", withExtension: "m4a")!
-      }
-      return try! AVAudioFile(forReading: url)
+    var particleEmmiter: SKEmitterNode {
+      return SKEmitterNode(fileNamed: self.rawValue)!
+    }
+    
+    var toneGenerator: ToneGenerator {
+      let url = Bundle.main.url(forResource:self.rawValue, withExtension: "m4a")!
+      let audioFile = try! AVAudioFile(forReading: url)
+      return ToneGenerator(audioFile: audioFile)
     }
   }
   
@@ -43,8 +40,9 @@ public class ToneGrapher: SKNode {
   public let upperLimit = 120.0
   public let lowerLimit = -120.0
   
-  private var toneGenerator: ToneGenerator
-  private let dotsEmmitter = SKEmitterNode(fileNamed: "dots")!
+  private let toneGenerator: ToneGenerator
+  private let particleEmitter: SKEmitterNode
+  
   private let pitchMultiplier = 20.0
 
   public var time: Double = 0.0 {
@@ -52,12 +50,12 @@ public class ToneGrapher: SKNode {
       let beatLenght = time.truncatingRemainder(dividingBy: self.beatLenght)
       if let pointerPosition = self.function(beatLenght) {
         let limitedPointerPosition = min(max(self.lowerLimit,pointerPosition),self.upperLimit)
-        self.dotsEmmitter.particlePosition.y = CGFloat(limitedPointerPosition)
-        self.dotsEmmitter.particleAlpha = 1.0
+        self.particleEmitter.particlePosition.y = CGFloat(limitedPointerPosition)
+        self.particleEmitter.particleAlpha = 1.0
         self.toneGenerator.pitch = self.pitchMultiplier * limitedPointerPosition
 
       } else {
-        self.dotsEmmitter.particleAlpha = 0.0
+        self.particleEmitter.particleAlpha = 0.0
         self.toneGenerator.pitch = nil
 
       }
@@ -65,18 +63,18 @@ public class ToneGrapher: SKNode {
   }
   
   public init(mode: Mode = .floute) {
-    self.toneGenerator = ToneGenerator(mode: mode)
+    self.toneGenerator = mode.toneGenerator
+    self.particleEmitter = mode.particleEmmiter
     super.init()
   }
   
   public func start() {
-    self.addChild(self.dotsEmmitter)
+    self.addChild(self.particleEmitter)
     self.toneGenerator.start()
   }
   
   required public init?(coder aDecoder: NSCoder) {
-    self.toneGenerator = ToneGenerator(mode: .floute)
-    super.init(coder: aDecoder)
+    fatalError("Not Implemented (or needed in this case)")
   }
   
   

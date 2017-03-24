@@ -32,10 +32,8 @@ class ToneGenerator {
     self.player.volume = 0.0
   }
   
-  init(mode: ToneGrapher.Mode) {
+  init(audioFile: AVAudioFile) {
     
-    let audioFile = mode.audioFile
-
     let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
     try! audioFile.read(into:buffer)
     
