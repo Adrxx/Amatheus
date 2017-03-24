@@ -4,21 +4,29 @@ import SpriteKit
 import AVFoundation
 
 class GameScene: Amatheus {
-  
+
   override func setup() {
+
     let tone1 = ToneGrapher()
-    tone1.beatLenght = M_PI_2
-    tone1.function = { (x) -> Double in
-      return x.sine(amplitude: 100, frequency: 10)
+    tone1.beatLenght = M_PI
+    tone1.function = { (time) -> Double? in
+      return nil//(time.sine(amplitude: 50, frequency: 10) > 0) ? C : nil
     }
     self.add(toneGrapher: tone1)
-    
-    let tone2 = ToneGrapher()
+
+    let tone2 = ToneGrapher(mode: .synth)
     tone2.beatLenght = M_PI
-    tone2.function = { (x) -> Double in
-      return C
+    tone2.function = { (time) -> Double? in
+      return time.sine(amplitude: 50, frequency: 10)
     }
     self.add(toneGrapher: tone2)
+
+    let tone3 = ToneGrapher(mode: .sax)
+    tone3.beatLenght = M_PI
+    tone3.function = { (time) -> Double? in
+      return nil//(time.sine(amplitude: 50, frequency: 40) > 0) ? G : nil
+    }
+    self.add(toneGrapher: tone3)
 
 
   }

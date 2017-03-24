@@ -6,9 +6,11 @@ open class Amatheus: SKScene {
   var startingTime:CFTimeInterval?
   
   open func add(toneGrapher: ToneGrapher) {
-    self.addChild(toneGrapher)
     toneGrapher.start()
+    self.addChild(toneGrapher)
+
     self.toneGraphers.append(toneGrapher)
+    
   }
   
   open override func didMove(to view: SKView) {
