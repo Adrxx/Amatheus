@@ -2,12 +2,8 @@ import Foundation
 
 extension Double {
   
-  public func octave(_ octave: Int) -> Double {
+  public func shiftedOctave(to octave: Int) -> Double {
     return self + (60.0*Double(octave))
-  }
-  
-  public func sharp() -> Double {
-    return self + 5
   }
   
   public func square(slope: Double) -> Double {
@@ -30,6 +26,8 @@ extension Double {
     return self
   }
 }
+
+
 
 
 //public enum Note: Double {
