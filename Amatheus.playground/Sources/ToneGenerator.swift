@@ -8,17 +8,23 @@ class ToneGenerator {
   private let player = AVAudioPlayerNode()
   private let pitchEffect = AVAudioUnitTimePitch()
   private let reverb = AVAudioUnitReverb()
-
-  var pitch: Double? {
-    set {
-      if let newValue = newValue {
-        self.player.volume = 1.0
-        //if (!self.player.isPlaying) { self.player.play() }
-        self.pitchEffect.pitch = Float(newValue)
-        //if (self.player.isPlaying) { }
-      } else {
-        self.player.volume = 0.0
+  
+  public var muted: Bool = true {
+    willSet {
+      if newValue == muted {
+        if newValue {
+          self.player.pause()
+        } else {
+          self.player.play()
+          //self.player.volume = 1.0
+        }
       }
+    }
+  }
+
+  var pitch: Double {
+    set {
+      self.pitchEffect.pitch = Float(newValue)
     }
     get {
       return Double(self.pitchEffect.pitch)
@@ -28,8 +34,8 @@ class ToneGenerator {
   func start() {
     self.engine.prepare()
     try! self.engine.start()
-    self.player.play()
-    self.player.volume = 0.0
+    //self.player.play()
+    
   }
   
   init(audioFile: AVAudioFile) {
@@ -37,16 +43,16 @@ class ToneGenerator {
     let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: UInt32(audioFile.length))
     try! audioFile.read(into:buffer)
     
-    reverb.loadFactoryPreset(.largeHall)
-    reverb.wetDryMix = 35
+    self.reverb.loadFactoryPreset(.mediumRoom)
+    self.reverb.wetDryMix = 40
 
     self.engine.attach(self.player)
     self.engine.attach(self.pitchEffect)
-    self.engine.attach(reverb)
+    self.engine.attach(self.reverb)
 
-    self.engine.connect(self.player, to: pitchEffect, format: buffer.format)
-    self.engine.connect(self.pitchEffect, to: reverb, format: buffer.format)
-    self.engine.connect(self.reverb, to: self.engine.mainMixerNode, format: reverb.outputFormat(forBus: 0))
+    self.engine.connect(self.player, to: self.pitchEffect, format: buffer.format)
+    self.engine.connect(self.pitchEffect, to: self.reverb, format: buffer.format)
+    self.engine.connect(self.reverb, to: self.engine.mainMixerNode, format: self.reverb.outputFormat(forBus: 0))
     
     self.player.scheduleBuffer(buffer, at: nil, options: .loops)
     

@@ -2,18 +2,10 @@ import Foundation
 import SpriteKit
 import AVFoundation
 
-public typealias ToneGrapherFunction = (_ x:Double) -> Double?
-public typealias Seconds = Double
-public typealias Note = Double
-public let C = 0.0
-public let D = 10.0
-public let E = 20.0
-public let F = 25.0
-public let G = 35.0
-public let A = 45.0
-public let B = 55.0
+public typealias ToneGrapherFunction = (Double) -> Double?
 
 public class ToneGrapher: SKNode {
+  
   
   public enum Mode : String {
     case floute
@@ -35,7 +27,7 @@ public class ToneGrapher: SKNode {
   public var function: ToneGrapherFunction = { (x) -> Double in return x }
   
 
-  public var beatLenght = 2.0
+  public var beatLength = 2.0
   
   public let upperLimit = 120.0
   public let lowerLimit = -120.0
@@ -44,27 +36,39 @@ public class ToneGrapher: SKNode {
   private let particleEmitter: SKEmitterNode
   
   private let pitchMultiplier = 20.0
+  private var flag = 0
 
   public var time: Double = 0.0 {
     willSet {
-      let beatLenght = time.truncatingRemainder(dividingBy: self.beatLenght)
+      let beatLenght = newValue.truncatingRemainder(dividingBy: self.beatLength)
+      
       if let pointerPosition = self.function(beatLenght) {
         let limitedPointerPosition = min(max(self.lowerLimit,pointerPosition),self.upperLimit)
-        self.particleEmitter.particlePosition.y = CGFloat(limitedPointerPosition)
-        self.particleEmitter.particleAlpha = 1.0
+        self.particleEmitter.particlePosition.y = CGFloat(limitedPointerPosition*2)
         self.toneGenerator.pitch = self.pitchMultiplier * limitedPointerPosition
-
+        self.toneGenerator.muted = false
+        if flag > 0 {
+          self.particleEmitter.particleAlpha = 1.0
+          flag = 0
+        } else {
+          flag += 1
+        }
       } else {
+        flag = 0
+        self.toneGenerator.muted = true
         self.particleEmitter.particleAlpha = 0.0
-        self.toneGenerator.pitch = nil
-
       }
+    }
+    
+    didSet {
+      
     }
   }
   
   public init(mode: Mode = .floute) {
     self.toneGenerator = mode.toneGenerator
     self.particleEmitter = mode.particleEmmiter
+    self.particleEmitter.particleAlpha = 0.0
     super.init()
   }
   
