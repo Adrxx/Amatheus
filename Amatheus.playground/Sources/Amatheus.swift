@@ -4,29 +4,29 @@ import SpriteKit
 open class Amatheus: SKScene {
   
   private let initialDelay = 1.0
+  private let background = SKSpriteNode(imageNamed: "background")
   open var toneGraphers: [ToneGrapher] = []
   var startingTime: CFTimeInterval?
   var now: CFTimeInterval?
+  
 
   open func add(toneGrapher: ToneGrapher) {
+
     self.addChild(toneGrapher)
+  
+
     self.toneGraphers.append(toneGrapher)
     toneGrapher.start()
   }
   
   open override func didMove(to view: SKView) {
+    self.addChild(self.background)
     self.setup()
   }
   
   open func setup() {}
-
   
-  override open func update(_ currentTime: TimeInterval) {
-    if let startingTime = self.startingTime {
-      self.now = (currentTime - startingTime)
-    } else {
-      self.startingTime = currentTime
-    }
+  override open func didFinishUpdate() {
     if let now = self.now {
       for toneGrapher in self.toneGraphers {
         let delayedNow = now - self.initialDelay
@@ -34,6 +34,15 @@ open class Amatheus: SKScene {
           toneGrapher.time = delayedNow
         }
       }
+    }
+  }
+
+  
+  override open func update(_ currentTime: TimeInterval) {
+    if let startingTime = self.startingTime {
+      self.now = (currentTime - startingTime)
+    } else {
+      self.startingTime = currentTime
     }
   }
   

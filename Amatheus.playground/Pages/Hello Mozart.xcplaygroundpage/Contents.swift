@@ -1,5 +1,8 @@
 //: [Previous](@previous)
-
+//: # A Swift Tour
+//:
+//: Tradition suggests that the first program in a new language should print the words “Hello, world!” on the screen. In Swift, this can be done in a single line:
+//:
 import SpriteKit
 import AVFoundation
 
@@ -27,8 +30,8 @@ struct Note {
     // And so on...
   }
   
-  var pitch: Double?
-  var length: Double
+  private(set) var pitch: Double?
+  private(set) var length: Double
   
   var sharp: Note {
     return Note(pitch: self.pitch?.advanced(by: 5), length: self.length)
@@ -46,9 +49,9 @@ struct Note {
     return Note(pitch: self.pitch?.advanced(by: (60.0*Double(octave))), length: self.length)
   }
   
-  init(pitch: Double?, length: Double) {
+  init(pitch: Double?, length: Length = .quarter) {
     self.pitch = pitch
-    self.length = length
+    self.length = length.rawValue
   }
   
   init(_ name: Name?, _ length: Length = .quarter) {
@@ -60,10 +63,14 @@ struct Note {
 }
 
 class NoteSequencer {
-  
-  var noteGap = 0.05
-  var beatsPerMinute = 120.0
   private var noteRanges: [Range<Double>] = []
+  
+  private var maxNoteGap = 0.05
+  var beatsPerMinute = 120.0 {
+    didSet {
+      self.updateRanges()
+    }
+  }
   private var notes: [Note] = [] {
     didSet {
       self.updateRanges()
@@ -88,16 +95,31 @@ class NoteSequencer {
   }
   
   private func updateRanges() {
+    self.noteRanges = []
     var accumulatedLength = 0.0
     for note in self.notes {
       let length = note.length * self.speed
-      let noteRange = accumulatedLength..<accumulatedLength+length-self.noteGap
+      let gap = min(0.12 * length,self.maxNoteGap)
+      let noteRange = accumulatedLength..<accumulatedLength + length - gap
       accumulatedLength += length
       self.noteRanges.append(noteRange)
     }
   }
   
   func pitch(atTime time: Double) -> Double? {
+    
+    guard let currentRange = currentRange else {
+      for (i,range) in self.noteRanges.enumerated() {
+        if range.contains(time) {
+          self.currentRange = range
+          return self.notes[i].pitch
+        }
+      }
+      return nil
+    }
+    
+    return self.notes[].pitch
+    
     var i = 0 // Good old index because this will be executed a lot, enumerated() wouldn't be the best
     for range in self.noteRanges {
       if range.contains(time) {
@@ -205,38 +227,40 @@ class GameScene: Amatheus {
     
     
     
-//    let notes3: [Note] = [
-//      Note(.G),
-//      Note(.A).sharp,
-//      Note(.C , .half).octave(1),
-//      Note(.G),
-//      Note(.A).sharp,
-//      Note(.C).sharp.octave(1),
-//      Note(.C , .eighth).octave(1),
-//      Note(.G),
-//      Note(.A).sharp,
-//      Note(.C , .half).octave(1),
-//      Note(.A).sharp,
-//      Note(.G),
-//      ]
+    let notes3: [Note] = [
+      Note(.G, .thirtySecond),
+      Note(.A, .sixtyFourth).sharp,
+      Note(.C , .sixtyFourth).octave(1),
+      Note(.G , .sixtyFourth),
+      Note(.A , .sixtyFourth).sharp,
+      Note(.C , .sixtyFourth).sharp.octave(1),
+      Note(.C , .eighth).octave(1),
+      Note(.G , .sixtyFourth),
+      Note(.A , .sixtyFourth).sharp,
+      Note(.C , .sixtyFourth).octave(1),
+      Note(.A , .sixtyFourth).sharp,
+      Note(.G , .sixtyFourth),
+      ]
     
     
     let melodySequencer = NoteSequencer(notes: melodyNotes)
+    
     let melody = ToneGrapher(mode: .floute)
     
     melody.beatLength = melodySequencer.calculatedLength
     melody.function = { (time) -> Double? in
       return melodySequencer.pitch(atTime: time)
-      
+
     }
+    
     self.add(toneGrapher: melody)
     
     let chordsSequencer = NoteSequencer(notes: chordsNotes)
+    
     let chords = ToneGrapher(mode: .sax)
     chords.beatLength = chordsSequencer.calculatedLength
     chords.function = { (time) -> Double? in
       return chordsSequencer.pitch(atTime: time)?.shiftedOctave(to: -1)
-      
     }
     self.add(toneGrapher: chords)
   }
@@ -247,10 +271,12 @@ import PlaygroundSupport
 let rect = NSRect(x: 0, y: 0, width: 500, height: 600)
 let view = SKView(frame: rect)
 let scene = GameScene(size: rect.size)
-view.preferredFramesPerSecond = 60
-view.showsFPS = true
 scene.anchorPoint = CGPoint(x: 0.8, y: 0.5)
 
+view.showsFPS = true
+view.allowsTransparency = false
+view.ignoresSiblingOrder = true
+view.isAsynchronous = false
 view.presentScene(scene)
 PlaygroundPage.current.liveView = view
 

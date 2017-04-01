@@ -27,19 +27,3 @@ extension Double {
   }
 }
 
-
-
-
-//public enum Note: Double {
-//  let C = 10
-//  let D = 20
-//  let E = 30
-//  let F = 35
-//  let G = 45
-//  let A = 55
-//  let B = 65
-//  
-//  public func sharp() -> Double {
-//    return self.rawValue + 5.0
-//  }
-//}
