@@ -6,8 +6,9 @@
 import SpriteKit
 import AVFoundation
 
+//: A `ToneGrapher` function is of type `(Double) -> Double?`, if you return `nil`, the ToneGrapher will produce no sound.
 
-class GameScene: Amatheus {
+class GameScene: AmatheusScene {
   
   let melodyNotes: [Note] = [
     Note(.E),

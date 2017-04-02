@@ -1,7 +1,7 @@
 import Foundation
 import AVFoundation
 
-class ToneGenerator {
+class PitchShifter {
 
   private let engine = AVAudioEngine()
   private let player = AVAudioPlayerNode()

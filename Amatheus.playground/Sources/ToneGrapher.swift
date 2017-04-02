@@ -15,22 +15,22 @@ public class ToneGrapher: SKNode {
       return SKEmitterNode(fileNamed: self.rawValue)!
     }
     
-    var toneGenerator: ToneGenerator {
+    var pitchShifter: PitchShifter {
       let url = Bundle.main.url(forResource:self.rawValue, withExtension: "m4a")!
       let audioFile = try! AVAudioFile(forReading: url)
-      return ToneGenerator(audioFile: audioFile)
+      return PitchShifter(audioFile: audioFile)
     }
   }
   
   public var x: Double = 0.0
   public var function: ToneGrapherFunction = { (x) -> Double in return x }
   
-  public var beatLength = 2.0
+  public var beatLength = 60.0
   
   public let upperLimit = 120.0
   public let lowerLimit = -120.0
   
-  private let toneGenerator: ToneGenerator
+  private let pitchShifter: PitchShifter
   private let particleEmitter: SKEmitterNode
   
   private let pitchMultiplier = 20.0
@@ -43,8 +43,8 @@ public class ToneGrapher: SKNode {
       if let pointerPosition = self.function(beatLenght) {
         let limitedPointerPosition = min(max(self.lowerLimit,pointerPosition),self.upperLimit)
         self.particleEmitter.particlePosition.y = CGFloat(limitedPointerPosition*2)
-        self.toneGenerator.pitch = self.pitchMultiplier * limitedPointerPosition
-        self.toneGenerator.muted = false
+        self.pitchShifter.pitch = self.pitchMultiplier * limitedPointerPosition
+        self.pitchShifter.muted = false
         if skipFrame {
           self.particleEmitter.particleAlpha = 1.0
           skipFrame = false
@@ -53,14 +53,14 @@ public class ToneGrapher: SKNode {
         }
       } else {
         skipFrame = false
-        self.toneGenerator.muted = true
+        self.pitchShifter.muted = true
         self.particleEmitter.particleAlpha = 0.0
       }
     }
   }
   
   public init(mode: Mode = .floute) {
-    self.toneGenerator = mode.toneGenerator
+    self.pitchShifter = mode.pitchShifter
     self.particleEmitter = mode.particleEmmiter
     self.particleEmitter.particleAlpha = 0.0
     super.init()
@@ -68,7 +68,7 @@ public class ToneGrapher: SKNode {
   
   public func start() {
     self.addChild(self.particleEmitter)
-    self.toneGenerator.start()
+    self.pitchShifter.start()
   }
   
   required public init?(coder aDecoder: NSCoder) {

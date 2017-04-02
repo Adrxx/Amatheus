@@ -6,12 +6,8 @@ extension Double {
     return self + (60.0*Double(octave))
   }
   
-  public func square(slope: Double) -> Double {
-    return self
-  }
-  
   public func linear(slope: Double) -> Double {
-    return self
+    return self*slope
   }
   
   public func cosine(amplitude: Double, frequency: Double) -> Double {
@@ -22,8 +18,5 @@ extension Double {
     return sin(self*frequency)*amplitude
   }
   
-  public func tangent(amplitude: Double, frequency: Double) -> Double {
-    return self
-  }
 }
 

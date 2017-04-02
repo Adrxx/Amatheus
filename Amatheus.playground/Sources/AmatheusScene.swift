@@ -1,7 +1,7 @@
 import Foundation
 import SpriteKit
 
-open class Amatheus: SKScene {
+open class AmatheusScene: SKScene {
   
   private let initialDelay = 1.0
   private let background = SKSpriteNode(imageNamed: "background")
