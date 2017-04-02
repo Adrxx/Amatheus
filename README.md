@@ -1,2 +1,2 @@
 # Amatheus
-WWDC 2017 Scholarship proyect
+WWDC 2017 Scholarship project
