@@ -25,8 +25,7 @@ class SmokeInTheWaterScene: AmatheusScene {
     Note(nil, .eighth),
     Note(.B, .eighth).flat,
     Note(nil, .eighth),
-    Note(.G, .eighth),
-    Note(.G, .half).dotted,
+    Note(.G, .half).dotted.extra(length: .eighth),
     ]
 //: A note can also be written like this Note(.G), if you don't define its length, the default is a quarter note. Notice how you can also make flat or sharp variations and even dotted notes.
   let smokeInTheWaterSecondVoice: [Note] = [
@@ -50,8 +49,7 @@ class SmokeInTheWaterScene: AmatheusScene {
     Note(nil, .eighth),
     Note(.F, .eighth),
     Note(nil, .eighth),
-    Note(.D, .eighth),
-    Note(.D, .half).dotted,
+    Note(.D, .half).dotted.extra(length: .eighth),
     ]
   
   override func setup() {

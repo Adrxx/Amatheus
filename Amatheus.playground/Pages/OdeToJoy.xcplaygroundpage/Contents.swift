@@ -1,7 +1,6 @@
 //: [Back](@Musical)
 //: ## Ode To Joy
 //: By Beethoven
-
 class OdeToJoy: AmatheusScene {
   let melodyNotes: [Note] = [
     Note(.E),

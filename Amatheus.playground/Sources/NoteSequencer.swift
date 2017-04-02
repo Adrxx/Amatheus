@@ -5,7 +5,7 @@ public class NoteSequencer {
   private var noteRanges: [Range<Double>] = []
   
   private var maxNoteGap = 0.05
-  private var noteGapProportion = 0.15
+  private var noteGapProportion = 0.2
   /// Controls the overall speed of the notes, 120bpm would mean that a quarter note lasts 0.5 seconds.
   public var beatsPerMinute = 120.0 {
     didSet {

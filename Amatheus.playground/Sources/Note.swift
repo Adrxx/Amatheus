@@ -61,6 +61,14 @@ public struct Note {
     return Note(pitch: self.pitch, length: self.length + 0.5*self.length)
   }
   
+  /// Adds extra lenght for complex note durations
+  ///
+  /// - Parameter length: the length to add
+  /// - Returns: the same note with the length added as specified.
+  public func extra(length: Length) -> Note {
+    return Note(pitch: self.pitch, length: self.length+length.rawValue)
+  }
+  
   /// Shifts a note to a octave.
   ///
   /// - Parameter octave: The number of octaves that the note will be shifted.
