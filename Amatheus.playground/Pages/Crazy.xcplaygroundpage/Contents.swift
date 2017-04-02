@@ -43,7 +43,7 @@ class GetCrazy: AmatheusScene {
     ]
   
   override func setup() {
-//: Here I've made 3 different experiments:
+//: Here I've made 3 different experiments, keep scrolling to try all of them by yourself:
     let cucarachaSequence = NoteSequencer(notes: cucaracha)
     cucarachaSequence.beatsPerMinute = 160
     let tipsyCucaracha = ToneGrapher(mode: .floute)
@@ -73,7 +73,7 @@ class GetCrazy: AmatheusScene {
     //self.add(toneGrapher: reverseCucaracha)
 
 //: Now is time you go crazy too!!
-//: And If you wanna go even more crazy, why not selecting me for a **WWDC 2017 Scholarship**! ... What?? Who said that?? 🤔
+//: And If you wanna go even more crazy, why not selecting me for a **WWDC 2017 Scholarship**! ... What?? Who said that? 🤔
     
 //: Thank You!
   }

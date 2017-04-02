@@ -3,7 +3,7 @@
 //: Now that you know the basics, we can go a dive little bit deeper and go a little bit more complex. If you return a constant 0 in the function of a `ToneGrapher` you would get a C (Do), +5 is a semitone up and so +10 is a one tone up. So a 10 is equal to R (Re), and 15 is equal to R# (Re sharp). With this info, you can start building your masterpieces.
 
 class SmokeInTheWaterScene: AmatheusScene {
-//: I've made this mini API to make songs. Let's write some notes.
+//: I made this mini API to make songs. Let's write some notes.
   let smokeInTheWater: [Note] = [
     Note(.G, .eighth),
     Note(nil, .eighth),
