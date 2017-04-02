@@ -27,7 +27,7 @@ class SmokeInTheWaterScene: AmatheusScene {
     Note(nil, .eighth),
     Note(.G, .half).dotted.extra(length: .eighth),
     ]
-//: A note can also be written like this Note(.G), if you don't define its length, the default is a quarter note. Notice how you can also make flat or sharp variations and even dotted notes.
+//: A note can also be written like this `Note(.G)`, if you don't define its length, the default is a quarter note. Notice how you can also make flat or sharp variations and even dotted notes.
   let smokeInTheWaterSecondVoice: [Note] = [
     Note(.D, .eighth),
     Note(nil, .eighth),
@@ -74,17 +74,11 @@ class SmokeInTheWaterScene: AmatheusScene {
 //: - Experiment:
 //: Change some of the notes above, maybe mess with the highVoice function by changing the 0 in advanced(by: 0)
     
-//: I've spent some time with this... you can listen to a small collection of songs here:
-
-/*:
-## Song collection:
-1. [Ode To Joy](OdeToJoy)
-2. [Stand By Me](StandByMe)
-3. [That song from that scene from that movie "Big"](BigSong)
-4. [La cucaracha](Cucaracha)
-*/
-//: And when you're done, it's time to go [Crazy](crazy)
+//: Here are other songs you can check out:
+//:
+//: [Ode To Joy](OdeToJoy) | [Stand By Me](StandByMe)
     
+//: And when you're done, it's time to go [Crazy](Crazy)!
   }
 }
 

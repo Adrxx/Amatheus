@@ -24,7 +24,7 @@ public class NoteSequencer {
     }
   }
   
-  /// Calculates the overall duration of the note sequence.
+  /// Calculates the overall duration of the note sequence in seconds.
   public var calculatedLength: Double {
     return self.notes.reduce(0.0, { (result, note) -> Double in
       return result + note.length*self.speed

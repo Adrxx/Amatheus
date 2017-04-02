@@ -28,9 +28,21 @@ public class ToneGrapher: SKNode {
       return PitchShifter(audioFile: audioFile)
     }
   }
+  /// The function used by the `ToneGrapher` to map the inputs to outputs
   public var function: ToneGrapherFunction = { (x) -> Double in return x }
   
+  /// The time in seconds until the ToneGrapher loops. 
   public var loopLenght = 60.0
+  
+  public var volume: Float {
+    set {
+      self.pitchShifter.volume = newValue
+    }
+    get {
+      return self.pitchShifter.volume
+    }
+  }
+
   
   /// The top limit of the graph and pitch.
   public let upperLimit = 120.0
@@ -39,7 +51,6 @@ public class ToneGrapher: SKNode {
   
   private let pitchShifter: PitchShifter
   private let particleEmitter: SKEmitterNode
-  
   private let pitchMultiplier = 20.0
   private var skipFrame = false // used to skip a frame so particle emmiter doesn't render itself moving to the new location
 

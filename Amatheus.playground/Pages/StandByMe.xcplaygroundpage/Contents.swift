@@ -1,27 +1,27 @@
-//: [Back](@Musical)
+//: [Back](Musical)
 //: ## Stand By Me
 //: By Jerry Leiber
 class StandByMe: AmatheusScene {
   let melodyNotes: [Note] = [
-//    Note(nil, .whole),
-//    Note(nil, .whole),
-//    Note(nil, .whole),
-//    Note(nil, .whole),
-//    Note(nil, .whole),
-//    Note(nil, .whole),
-//    Note(nil, .whole),
-//    Note(nil, .half),
-//    Note(nil, .eighth),
-//    Note(.A, .eighth),
-//    Note(.C, .eighth).octave(1),
+    Note(nil, .whole),
+    Note(nil, .whole),
+    Note(nil, .whole),
+    Note(nil, .whole),
+    Note(nil, .whole),
+    Note(nil, .whole),
+    Note(nil, .whole),
+    Note(nil, .half),
+    Note(nil, .eighth),
+    Note(.A, .eighth),
+    Note(.C, .eighth).octave(1),
     Note(.D).octave(1),
-    Note(nil),
+    Note(nil, .half),
     Note(nil, .eighth),
     Note(.A, .eighth),
     Note(.C, .half).octave(1),
     Note(nil),
     Note(nil, .half),
-    Note(nil),
+    Note(nil, .eighth),
     Note(.F, .eighth),
     Note(.G, .eighth),
     Note(.A, .eighth),
@@ -35,17 +35,17 @@ class StandByMe: AmatheusScene {
     Note(.A, .eighth),
     Note(.F ).dotted,
     Note(nil),
-
     Note(.F, .eighth),
     Note(.A, .eighth),
     Note(.A, .eighth),
-    Note(.G ),
+    Note(.G),
+    Note(.G, .eighth),
+    Note(nil, .eighth),
     Note(.F, .eighth),
-    Note(.F, .eighth),
+    Note(.G),
+    Note(.F),
+    Note(nil, .eighth),
     Note(nil),
-    Note(nil),
-
-
     ]
   
   let chordsNotes: [Note] = [

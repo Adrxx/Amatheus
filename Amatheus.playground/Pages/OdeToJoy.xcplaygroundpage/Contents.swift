@@ -1,4 +1,4 @@
-//: [Back](@Musical)
+//: [Back](Musical)
 //: ## Ode To Joy
 //: By Beethoven
 class OdeToJoy: AmatheusScene {

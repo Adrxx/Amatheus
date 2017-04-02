@@ -21,6 +21,15 @@ class PitchShifter {
       }
     }
   }
+  public var volume: Float {
+    set {
+      self.player.volume = newValue
+    }
+    get {
+      return self.player.volume
+    }
+  }
+
 
   var pitch: Double {
     set {
@@ -34,8 +43,6 @@ class PitchShifter {
   func start() {
     self.engine.prepare()
     try! self.engine.start()
-    //self.player.play()
-    
   }
   
   init(audioFile: AVAudioFile) {

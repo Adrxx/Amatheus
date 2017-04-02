@@ -1,9 +1,7 @@
 //: [Previous](@previous)
 //: ## Get Crazy
 //: Now mix all of what you've learned and experiment!
-
 class GetCrazy: AmatheusScene {
-
 //: 🎶La cucaracha! La cucaracha! Ya no puede caminar, porque no tiene, porque le falta, una pata de atrás.🎶 Keep scrolling...
   let cucaracha: [Note] = [
     Note(.C, .eighth),

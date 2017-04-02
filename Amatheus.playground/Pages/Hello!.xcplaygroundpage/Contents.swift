@@ -22,25 +22,25 @@ class WelcomeScene: AmatheusScene {
     let sineception: (Double) -> Double? = { (time) -> Double? in
       return time.sine(amplitude: 50, frequency: 1) + time.sine(amplitude: 5, frequency: 10)
     }
-//: Change the function here:
+//: - Experiment:
+//: Change the function here to `sineJumps` or `sine` and see what happens:
     toneGrapher.function = sineception
     
     self.add(toneGrapher: toneGrapher)
-    
-//: You can have multiple Tone Graphers:
-    
+//: - Experiment:
+//: You can have multiple tone graphers in one scene, uncomment the code below to add another one.
+/*
     let otherToneGrapher = ToneGrapher(mode: .sax)
     otherToneGrapher.loopLenght = Double.pi*4
     otherToneGrapher.function = { (time) -> Double? in
       return sineJumps(time)?.advanced(by: -20)
     }
     self.add(toneGrapher: otherToneGrapher)
- 
-    
+ */
   }
 }
 
-//: Are yo ready to get [Musical](Musical)?
+//: Now... are you ready to get [Musical](Musical)?
 import PlaygroundSupport
 import SpriteKit
 let rect = NSRect(x: 0, y: 0, width: 500, height: 600)
