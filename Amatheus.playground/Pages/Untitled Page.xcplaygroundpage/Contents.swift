@@ -1,49 +1,37 @@
-////: Playground - noun: a place where people can play
-//
-//
-//import AVFoundation
-//
-//class SinePlayer{
-//  // store persistent objects
-//  var ae:AVAudioEngine
-//  var player:AVAudioPlayerNode
-//  var mixer:AVAudioMixerNode
-//  var buffer:AVAudioPCMBuffer
-//  
-//  init(){
-//    // initialize objects
-//    ae = AVAudioEngine()
-//    player = AVAudioPlayerNode()
-//    mixer = ae.mainMixerNode;
-//    buffer = AVAudioPCMBuffer(pcmFormat: player.outputFormat(forBus: 0), frameCapacity: 100)
-//    buffer.frameLength = 100
-//    
-//    // generate sine wave
-//    let sr:Float = Float(mixer.outputFormat(forBus: 0).sampleRate)
-//    let n_channels = mixer.outputFormat(forBus: 0).channelCount
-//    
-//    var i = 0
-//    while i < Int(buffer.frameLength) {
-//      let val = sinf(441.0*Float(i)*2*Float(M_PI)/sr)
-//      
-//      buffer.floatChannelData?.pointee[i] = val * 0.5
-//      i+=Int(n_channels)
-//    }
-//
-//    
-//    // setup audio engine
-//    ae.attach(player)
-//    ae.connect(player, to: mixer, format: player.outputFormat(forBus: 0))
-//    try! ae.start()
-//    
-//    // play player and buffer
-//    player.play()
-//    player.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
-//    
-//  }
-//  
-//}
-//
-//var sp = SinePlayer()
-//import PlaygroundSupport
-//PlaygroundPage.current.needsIndefiniteExecution = true
+//: # A(math)eus 🎷
+//:
+//: A(math)eus is an Audiovisual Grapher built with Sprite Kit, AVFoundation and ❤️. This playground came to life with the idea of not only seeing but also listen to the different mathematical using the eleapsed time in seconds as the input and the tone pitch as the output. As I was building the project, I discovered lots of cool stuff you can do with it, and so I wrote my code in a way you can you can experiment with it.
+
+import SpriteKit
+
+class WelcomeScene: Amatheus {
+  
+  override func setup() {
+    
+    let sineTone = ToneGrapher(mode: .floute)
+    sineTone.beatLength = Double.pi*2
+    
+    let classicSine: (Double) -> Double? = { (time) -> Double? in
+      return time.sine(amplitude: 50, frequency: 1)
+    }
+    
+    let sineception: (Double) -> Double? = { (time) -> Double? in
+      return time.sine(amplitude: 50, frequency: 1) + time.sine(amplitude: 5, frequency: 10)
+    }
+//: - Experiment:
+//: This is where you
+    sineTone.function = sineception
+    self.add(toneGrapher: sineTone)
+    
+  }
+  
+}
+
+
+import PlaygroundSupport
+let rect = NSRect(x: 0, y: 0, width: 500, height: 600)
+let view = SKView(frame: rect)
+let scene = WelcomeScene(size: rect.size)
+
+view.presentScene(scene)
+PlaygroundPage.current.liveView = view
