@@ -2,60 +2,97 @@ import Foundation
 import SpriteKit
 import AVFoundation
 
-public typealias ToneGrapherFunction = (_ x:Double) -> Double?
-public typealias Seconds = Double
-public typealias Note = Double
-public let C = 10.0
-public let D = 20.0
-public let E = 30.0
-public let F = 35.0
-public let G = 45.0
-public let A = 55.0
-public let B = 65.0
+/// A function that takes a `Double` representing eleapsed seconds and returns another `Double` representing pitch, or nil representing no sound.
+public typealias ToneGrapherFunction = (Double) -> Double?
 
+/// A SKNode that graphs and emmits the sound of a certain mathematical function.
 public class ToneGrapher: SKNode {
+  
+  /// The sound and looks of the `ToneGrapher`
+  ///
+  /// - floute: kind of a soft sound.
+  /// - synth: kind of a techno sound.
+  /// - sax: kind of a sexy sound.
+  public enum Mode : String {
+    case floute
+    case synth
+    case sax
     
-  public var x: Double = 0.0
+    var particleEmmiter: SKEmitterNode {
+      return SKEmitterNode(fileNamed: self.rawValue)!
+    }
+    
+    var pitchShifter: PitchShifter {
+      let url = Bundle.main.url(forResource:self.rawValue, withExtension: "m4a")!
+      let audioFile = try! AVAudioFile(forReading: url)
+      return PitchShifter(audioFile: audioFile)
+    }
+  }
+  /// The function used by the `ToneGrapher` to map the inputs to outputs
   public var function: ToneGrapherFunction = { (x) -> Double in return x }
   
-
-  public var beatLenght = 2.0
+  /// The time in seconds until the ToneGrapher loops. 
+  public var loopLenght = 60.0
   
+  public var volume: Float {
+    set {
+      self.pitchShifter.volume = newValue
+    }
+    get {
+      return self.pitchShifter.volume
+    }
+  }
+
+  
+  /// The top limit of the graph and pitch.
   public let upperLimit = 120.0
+  /// The bottom limit of the graph and pitch.
   public let lowerLimit = -120.0
   
-  private let toneGenerator = ToneGenerator()
-  private let dotsEmmitter = SKEmitterNode(fileNamed: "dots")!
+  private let pitchShifter: PitchShifter
+  private let particleEmitter: SKEmitterNode
   private let pitchMultiplier = 20.0
+  private var skipFrame = false // used to skip a frame so particle emmiter doesn't render itself moving to the new location
 
+  /// the time of the simulation
   public var time: Double = 0.0 {
     willSet {
-      let beatLenght = time.truncatingRemainder(dividingBy: self.beatLenght)
+      let beatLenght = newValue.truncatingRemainder(dividingBy: self.loopLenght)
+      
       if let pointerPosition = self.function(beatLenght) {
         let limitedPointerPosition = min(max(self.lowerLimit,pointerPosition),self.upperLimit)
-        self.dotsEmmitter.particlePosition.y = CGFloat(limitedPointerPosition)
-        self.dotsEmmitter.particleAlpha = 1.0
-        self.toneGenerator.pitch = self.pitchMultiplier * limitedPointerPosition
-
+        self.particleEmitter.particlePosition.y = CGFloat(limitedPointerPosition*2)
+        self.pitchShifter.pitch = self.pitchMultiplier * limitedPointerPosition
+        self.pitchShifter.muted = false
+        if skipFrame {
+          self.particleEmitter.particleAlpha = 1.0
+          skipFrame = false
+        } else {
+          skipFrame = true
+        }
       } else {
-        self.dotsEmmitter.particleAlpha = 0.0
-        self.toneGenerator.pitch = nil
-
+        skipFrame = false
+        self.pitchShifter.muted = true
+        self.particleEmitter.particleAlpha = 0.0
       }
     }
   }
   
-  public override init() {
+  public init(mode: Mode = .floute) {
+    self.pitchShifter = mode.pitchShifter
+    self.particleEmitter = mode.particleEmmiter
+    self.particleEmitter.particleAlpha = 0.0
     super.init()
   }
   
+  /// Kickstarts the grapher
   public func start() {
-    self.addChild(self.dotsEmmitter)
-    self.toneGenerator.start()
+    self.addChild(self.particleEmitter)
+    self.pitchShifter.start()
   }
   
   required public init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
+    fatalError("Not Implemented (or needed in this case)")
   }
   
   
