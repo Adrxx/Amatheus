@@ -2,14 +2,13 @@
 //: A(math)eus is an Audiovisual Grapher built with Sprite Kit, AVFoundation and ❤️.
 //: ## Let's walk you through the basics
 //: A mathematical function relates inputs with ouputs, for this project, the input will be the eleapsed seconds of the scene and the ouput will be the pitch of a sound. Use the `ToneGrapher` class to specify the function that you want and then add it to your `AmatheusScene` in the `setup()` method.
-import SpriteKit
 class WelcomeScene: AmatheusScene {
 
   override func setup() {
 //: - Experiment:
 //: Try changing the `toneGrapher` function to any of the three functions I've made below. Mess with its other properties, if you're unsure of what they do, click on them while holding the **⌥ Opt** key.
     let toneGrapher = ToneGrapher(mode: .floute)
-    toneGrapher.beatLength = Double.pi*2
+    toneGrapher.loopLenght = Double.pi*2
 //: I've extended Double class with some helper functions like sine, cosine and linear. Here's a function you can use...
     let sine: (Double) -> Double? = { (time) -> Double? in
       return time.sine(amplitude: 50, frequency: 1)
@@ -29,19 +28,21 @@ class WelcomeScene: AmatheusScene {
     self.add(toneGrapher: toneGrapher)
     
 //: You can have multiple Tone Graphers:
-    /*
+    
     let otherToneGrapher = ToneGrapher(mode: .sax)
-    otherToneGrapher.beatLength = Double.pi*4
+    otherToneGrapher.loopLenght = Double.pi*4
     otherToneGrapher.function = { (time) -> Double? in
-      return pow(time,2).sine(amplitude: time*3, frequency: 1)
+      return sineJumps(time)?.advanced(by: -20)
     }
     self.add(toneGrapher: otherToneGrapher)
-     */
+ 
+    
   }
 }
 
 //: Are yo ready to get [Musical](Musical)?
 import PlaygroundSupport
+import SpriteKit
 let rect = NSRect(x: 0, y: 0, width: 500, height: 600)
 let view = SKView(frame: rect)
 let scene = WelcomeScene(size: rect.size)

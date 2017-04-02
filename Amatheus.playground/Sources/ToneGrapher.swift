@@ -25,7 +25,7 @@ public class ToneGrapher: SKNode {
   public var x: Double = 0.0
   public var function: ToneGrapherFunction = { (x) -> Double in return x }
   
-  public var beatLength = 60.0
+  public var loopLenght = 60.0
   
   public let upperLimit = 120.0
   public let lowerLimit = -120.0
@@ -38,7 +38,7 @@ public class ToneGrapher: SKNode {
 
   public var time: Double = 0.0 {
     willSet {
-      let beatLenght = newValue.truncatingRemainder(dividingBy: self.beatLength)
+      let beatLenght = newValue.truncatingRemainder(dividingBy: self.loopLenght)
       
       if let pointerPosition = self.function(beatLenght) {
         let limitedPointerPosition = min(max(self.lowerLimit,pointerPosition),self.upperLimit)

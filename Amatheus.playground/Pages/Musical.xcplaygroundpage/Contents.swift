@@ -1,158 +1,99 @@
 //: [Previous](@previous)
-//: # A Swift Tour
-//:
-//: Tradition suggests that the first program in a new language should print the words “Hello, world!” on the screen. In Swift, this can be done in a single line:
-//:
-import SpriteKit
-import AVFoundation
+//: ## Go get 'em Mozart
+//: Now that you know the basics, we can go a dive little bit deeper and go a little bit more complex. If you return a constant 0 in the function of a `ToneGrapher` you would get a C (Do), +5 is a semitone up and so +10 is a one tone up. So a 10 is equal to R (Re), and 15 is equal to R# (Re sharp). With this info, you can start building your masterpieces.
 
-//: A `ToneGrapher` function is of type `(Double) -> Double?`, if you return `nil`, the ToneGrapher will produce no sound.
-
-class GameScene: AmatheusScene {
-  
-  let melodyNotes: [Note] = [
-    Note(.E),
-    Note(.E),
-    Note(.F),
-    Note(.G),
-    Note(.G),
-    Note(.F),
-    Note(.E),
-    Note(.D),
-    Note(.C),
-    Note(.C),
-    Note(.D),
-    Note(.E),
-    Note(.E).dotted,
-    Note(.D , .eighth),
-    Note(.D , .half),
-    Note(.E),
-    Note(.E),
-    Note(.F),
-    Note(.G),
-    Note(.G),
-    Note(.F),
-    Note(.E),
-    Note(.D),
-    Note(.C),
-    Note(.C),
-    Note(.D),
-    Note(.E),
-    Note(.D).dotted,
-    Note(.C , .eighth),
-    Note(.C , .half),
-    Note(.D),
-    Note(.D),
-    Note(.E),
-    Note(.C),
-    Note(.D),
-    Note(.E , .eighth),
-    Note(.F , .eighth),
-    Note(.E),
-    Note(.C),
-    Note(.D),
-    Note(.E , .eighth),
-    Note(.F , .eighth),
-    Note(.E),
-    Note(.D),
-    Note(.C),
-    Note(.D),
-    Note(nil , .half),
-    Note(.E),
-    Note(.E),
-    Note(.F),
-    Note(.G),
-    Note(.G),
-    Note(.F),
-    Note(.E),
-    Note(.D),
-    Note(.C),
-    Note(.C),
-    Note(.D),
-    Note(.E),
-    Note(.D).dotted,
-    Note(.C , .eighth),
-    Note(.C , .half),
+class SmokeInTheWaterScene: AmatheusScene {
+//: I've made this mini API to make songs. Let's write some notes.
+  let smokeInTheWater: [Note] = [
+    Note(.G, .eighth),
+    Note(nil, .eighth),
+    Note(.B, .eighth).flat,
+    Note(nil, .eighth),
+    Note(.C ).octave(1),
+    Note(nil, .eighth),
+    Note(.G, .eighth),
+    Note(nil, .eighth),
+    Note(.B, .eighth).flat,
+    Note(nil, .eighth),
+    Note(.D, .eighth).octave(1).flat,
+    Note(.C, .half).octave(1),
+    Note(.G, .eighth),
+    Note(nil, .eighth),
+    Note(.B, .eighth).flat,
+    Note(nil, .eighth),
+    Note(.C ).octave(1),
+    Note(nil, .eighth),
+    Note(.B, .eighth).flat,
+    Note(nil, .eighth),
+    Note(.G, .eighth),
+    Note(.G, .half).dotted,
     ]
-  
-  let chordsNotes: [Note] = [
-    Note(.C , .whole),
-    Note(.G , .whole),
-    Note(.E , .whole),
-    Note(.G , .whole),
-    Note(.C , .whole),
-    Note(.G , .whole),
-    Note(.E , .whole),
-    Note(.F , .half),
-    Note(.E , .half),
-    Note(.G , .whole).octave(1),
-    Note(.G , .whole).octave(1),
-    Note(.G , .half).octave(1),
-    Note(.G , .half).sharp.octave(1),
-    Note(.A , .half).octave(1),
-    Note(.G , .half).octave(1),
-    Note(.C , .whole),
-    Note(.G , .whole),
-    Note(.E , .whole),
-    Note(.F , .half),
-    Note(.E , .half),
+//: A note can also be written like this Note(.G), if you don't define its length, the default is a quarter note. Notice how you can also make flat or sharp variations and even dotted notes.
+  let smokeInTheWaterSecondVoice: [Note] = [
+    Note(.D, .eighth),
+    Note(nil, .eighth),
+    Note(.F, .eighth),
+    Note(nil, .eighth),
+    Note(.G ),
+    Note(nil, .eighth),
+    Note(.D, .eighth),
+    Note(nil, .eighth),
+    Note(.F, .eighth),
+    Note(nil, .eighth),
+    Note(.A, .eighth).flat,
+    Note(.G, .half),
+    Note(.D, .eighth),
+    Note(nil, .eighth),
+    Note(.F, .eighth),
+    Note(nil, .eighth),
+    Note(.G ),
+    Note(nil, .eighth),
+    Note(.F, .eighth),
+    Note(nil, .eighth),
+    Note(.D, .eighth),
+    Note(.D, .half).dotted,
     ]
   
   override func setup() {
+//:  Here we'll use a `NoteSequencer` class, which you can use to arrange some Notes and generate a meoldic function for the `ToneGrapher`.
+    let chordsSequencer = NoteSequencer(notes: smokeInTheWaterSecondVoice)
+    let lowVoice = ToneGrapher(mode: .sax)
+    lowVoice.loopLenght = chordsSequencer.calculatedLength
+    // You can also set the function directly...
+    lowVoice.function = chordsSequencer.pitch(atTime:)
+    self.add(toneGrapher: lowVoice)
     
+    let melodySequencer = NoteSequencer(notes: smokeInTheWater)
+    let highVoice = ToneGrapher(mode: .sax)
+//: A `ToneGrapher` function is of type `(Double) -> Double?`, if you return `nil`, the ToneGrapher will produce no sound. That's why some notes above are `nil`, they are rests.
+    highVoice.loopLenght = melodySequencer.calculatedLength
+    highVoice.function = { (time) -> Double? in
+      return melodySequencer.pitch(atTime: time)?.advanced(by: 0)
+    }
     
+    self.add(toneGrapher: highVoice)
     
-    let notes3: [Note] = [
-      Note(.G, .thirtySecond),
-      Note(.A, .sixtyFourth).sharp,
-      Note(.C , .sixtyFourth).octave(1),
-      Note(.G , .sixtyFourth),
-      Note(.A , .sixtyFourth).sharp,
-      Note(.C , .sixtyFourth).sharp.octave(1),
-      Note(.C , .eighth).octave(1),
-      Note(.G , .sixtyFourth),
-      Note(.A , .sixtyFourth).sharp,
-      Note(.C , .sixtyFourth).octave(1),
-      Note(.A , .sixtyFourth).sharp,
-      Note(.G , .sixtyFourth),
-      ]
+//: - Experiment:
+//: Change some of the notes above, maybe mess with the highVoice function by changing the 0 in advanced(by: 0)
     
-    
-    let melodySequencer = NoteSequencer(notes: melodyNotes)
-    
-    let melody = ToneGrapher(mode: .floute)
-    
-    melody.beatLength = melodySequencer.calculatedLength
-    melody.function = { (time) -> Double? in
-      return melodySequencer.pitch(atTime: time)
+//: I've spent some time with this... you can listen to a small collection of songs here:
 
-    }
+/*:
+## Song collection:
+1. [Ode To Joy](OdeToJoy)
+2. [Stand By Me](StandByMe)
+3. [That song from that scene from that movie "Big"](BigSong)
+4. [La cucaracha](Cucaracha)
+*/
+//: And when you're done, it's time to go [Crazy](crazy)
     
-    self.add(toneGrapher: melody)
-    
-    let chordsSequencer = NoteSequencer(notes: chordsNotes)
-    
-    let chords = ToneGrapher(mode: .sax)
-    chords.beatLength = chordsSequencer.calculatedLength
-    chords.function = { (time) -> Double? in
-      return chordsSequencer.pitch(atTime: time)?.shiftedOctave(to: -1)
-    }
-    self.add(toneGrapher: chords)
   }
-  
 }
 
 import PlaygroundSupport
+import SpriteKit
 let rect = NSRect(x: 0, y: 0, width: 500, height: 600)
 let view = SKView(frame: rect)
-let scene = GameScene(size: rect.size)
-scene.anchorPoint = CGPoint(x: 0.8, y: 0.5)
-
-view.showsFPS = true
-view.allowsTransparency = false
-view.ignoresSiblingOrder = true
-view.isAsynchronous = false
+let scene = SmokeInTheWaterScene(size: rect.size)
 view.presentScene(scene)
 PlaygroundPage.current.liveView = view
-
-//: [Next](@next)

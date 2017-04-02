@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='macos' display-mode='rendered' executeOnSourceChanges='false'>
+<playground version='6.0' target-platform='macos' display-mode='raw' executeOnSourceChanges='false'>
     <pages>
         <page name='Hello!'/>
         <page name='Musical'/>
-        <page name='Experiments'/>
-        <page name='Hello Mario'/>
+        <page name='StandByMe'/>
+        <page name='OdeToJoy'/>
+        <page name='Crazy'/>
     </pages>
 </playground>
