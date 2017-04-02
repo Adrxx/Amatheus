@@ -1,6 +1,7 @@
 import Foundation
 import AVFoundation
 
+/// Shifts the pitch of an `AVAudioFile` in a custom way
 class PitchShifter {
 
   private let engine = AVAudioEngine()

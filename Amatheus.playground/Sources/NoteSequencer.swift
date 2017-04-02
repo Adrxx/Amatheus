@@ -1,11 +1,12 @@
 import Foundation
 
-
+/// It allows you to take an array of `Note`s and transform them into a function that a `ToneGrapher` can use.
 public class NoteSequencer {
   private var noteRanges: [Range<Double>] = []
   
   private var maxNoteGap = 0.05
   private var noteGapProportion = 0.15
+  /// Controls the overall speed of the notes, 120bpm would mean that a quarter note lasts 0.5 seconds.
   public var beatsPerMinute = 120.0 {
     didSet {
       self.updateRanges()
@@ -23,6 +24,7 @@ public class NoteSequencer {
     }
   }
   
+  /// Calculates the overall duration of the note sequence.
   public var calculatedLength: Double {
     return self.notes.reduce(0.0, { (result, note) -> Double in
       return result + note.length*self.speed
@@ -46,6 +48,10 @@ public class NoteSequencer {
     }
   }
   
+  /// The function that maps the notes into something a `ToneGrapher` can use.
+  ///
+  /// - Parameter time: The input time of the simulation.
+  /// - Returns: the resulting pitch based on the notes used.
   public func pitch(atTime time: Double) -> Double? {
     var i = 0 // Good old index because this will be executed a lot, enumerated() wouldn't be the best
     for range in self.noteRanges {
