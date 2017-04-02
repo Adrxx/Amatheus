@@ -6,7 +6,6 @@ public typealias ToneGrapherFunction = (Double) -> Double?
 
 public class ToneGrapher: SKNode {
   
-  
   public enum Mode : String {
     case floute
     case synth
@@ -26,7 +25,6 @@ public class ToneGrapher: SKNode {
   public var x: Double = 0.0
   public var function: ToneGrapherFunction = { (x) -> Double in return x }
   
-
   public var beatLength = 2.0
   
   public let upperLimit = 120.0
@@ -36,7 +34,7 @@ public class ToneGrapher: SKNode {
   private let particleEmitter: SKEmitterNode
   
   private let pitchMultiplier = 20.0
-  private var flag = 0
+  private var skipFrame = false // used to skip a frame so particle emmiter doesn't render itself moving to the new location
 
   public var time: Double = 0.0 {
     willSet {
@@ -47,21 +45,17 @@ public class ToneGrapher: SKNode {
         self.particleEmitter.particlePosition.y = CGFloat(limitedPointerPosition*2)
         self.toneGenerator.pitch = self.pitchMultiplier * limitedPointerPosition
         self.toneGenerator.muted = false
-        if flag > 0 {
+        if skipFrame {
           self.particleEmitter.particleAlpha = 1.0
-          flag = 0
+          skipFrame = false
         } else {
-          flag += 1
+          skipFrame = true
         }
       } else {
-        flag = 0
+        skipFrame = false
         self.toneGenerator.muted = true
         self.particleEmitter.particleAlpha = 0.0
       }
-    }
-    
-    didSet {
-      
     }
   }
   

@@ -3,7 +3,6 @@ import AVFoundation
 
 class ToneGenerator {
 
-  
   private let engine = AVAudioEngine()
   private let player = AVAudioPlayerNode()
   private let pitchEffect = AVAudioUnitTimePitch()
